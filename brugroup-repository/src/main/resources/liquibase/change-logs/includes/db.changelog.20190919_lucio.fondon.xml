@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20190919_lucio.fondon_1" author="lucio.fondon">
+
+        <insert tableName="USER">
+            <column name="ID" value="1"/>
+            <column name="US_FULLNAME" value="User"/>
+            <column name="US_USERNAME" value="user"/>
+            <column name="US_PASSWORD" value="YXAlMfOLArU8sOCeLF2GOrDIlcXg4PAyl9UR/vD8g3hIbDy"/>
+            <column name="US_LASTUPDATE" value="2014-02-20 11:01:20"/>
+        </insert>
+
+        <loadData encoding="UTF-8"
+                  file="liquibase/data/user.csv"
+                  separator=";"
+                  tableName="USER"/>
+
+    </changeSet>
+
+</databaseChangeLog>

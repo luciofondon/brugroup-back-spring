@@ -1,0 +1,21 @@
+#
+# Bases de datos HSQLDB
+#
+---
+version: '3'
+services:
+
+  hsqldb:
+    image: blacklabelops/hsqldb
+    hostname: hsqldb_brugroup
+    container_name: hsqldb_brugroup
+    network_mode: bridge
+    ports:
+      - 9001:9001
+    volumes:
+      - ./hsqldb-data:/var/lib/hsqldb
+    environment:
+      HSQLDB_DATABASE_NAME: brugroup
+      HSQLDB_DATABASE_ALIAS: brugroup
+      HSQLDB_USER: brugroup
+      HSQLDB_PASSWORD: brugroup

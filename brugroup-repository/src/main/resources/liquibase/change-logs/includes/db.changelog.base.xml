@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="lucio.fondon" id="1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+        <createTable tableName="USER">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="US_FULLNAME" type="VARCHAR(200)"/>
+            <column name="US_USERNAME" type="VARCHAR(20)"/>
+            <column name="US_PASSWORD" type="VARCHAR(255)"/>
+            <column name="US_LASTUPDATE" type="DATETIME"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
