@@ -4,7 +4,6 @@ import com.es.brujula.brugroup.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,11 +30,10 @@ public class UserController {
     private static final String ERROR = "Error {}";
     private static final String PAGEABLE_FILTER = "/lazy";
     private static final String USER_FILTER = "/filter";
+    private static final String WS = "/ws";
 
     @Autowired
     private UserService userService;
-
-
 
     @GetMapping
     @ApiOperation(value = "Get all users")
@@ -48,7 +46,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/ws")
+    @GetMapping(UserController.WS)
     @ApiOperation(value = "Get all users")
     public ResponseEntity<List<UserDto>> getUsersWS() {
         try {
@@ -71,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Create hotel")
+    @ApiOperation(value = "Create user")
     public ResponseEntity createUser(@Validated @RequestBody UserDto userDto) {
         try {
             UserDto user = userService.createUser(userDto);
@@ -79,16 +77,26 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
+    @PostMapping(UserController.WS)
+    @ApiOperation(value = "Create user WS")
+    public ResponseEntity createUserWS(@Validated @RequestBody UserDto userDto) {
+        try {
+            UserDto user = userService.createUserWS(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping(UserController.USER_MAPPING)
-    @ApiOperation(value = "Get hotel by id")
+    @ApiOperation(value = "Get user by id")
     public ResponseEntity<UserDto> getUser(@PathVariable("userId") Long userId) {
         try {
-            Optional<UserDto> hotelDto = userService.getHotel(userId);
-            if (hotelDto.isPresent()) {
-                return ResponseEntity.ok(hotelDto.get());
+            Optional<UserDto> userDto = userService.getUser(userId);
+            if (userDto.isPresent()) {
+                return ResponseEntity.ok(userDto.get());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
@@ -97,12 +105,28 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Update hotel by id")
+    @GetMapping(UserController.USER_MAPPING + UserController.WS)
+    @ApiOperation(value = "Get user by id WS")
+    public ResponseEntity<UserDto> getUserWS(@PathVariable("userId") Long userId) {
+        try {
+            Optional<UserDto> userDto = userService.getUserWS(userId);
+            if (userDto.isPresent()) {
+                return ResponseEntity.ok(userDto.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @ApiOperation(value = "Update user by id")
     @PutMapping(UserController.USER_MAPPING)
     public ResponseEntity updateUser(@PathVariable("userId") Long userId, @Validated @RequestBody UserDto userToPut) {
         UserDto userDto;
         try {
-            //  userToPut.setId(userId);
+            userToPut.setId(userId);
             userDto = userService.updateUser(userToPut);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(userDto);
         } catch (Exception e) {
@@ -110,11 +134,35 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Update user by id WS")
+    @PutMapping(UserController.USER_MAPPING + UserController.WS)
+    public ResponseEntity updateUserWS(@PathVariable("userId") Long userId, @Validated @RequestBody UserDto userToPut) {
+        UserDto userDto;
+        try {
+            userToPut.setId(userId);
+            userDto = userService.updateUserWS(userToPut);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(userDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @DeleteMapping(UserController.USER_MAPPING)
-    @ApiOperation(value = "Delete hotel by id")
+    @ApiOperation(value = "Delete user by id")
     public ResponseEntity deleteUser(@PathVariable("userId") Long userId) {
         try {
-            userService.delete(userId);
+            userService.deleteUser(userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping(UserController.USER_MAPPING + UserController.WS)
+    @ApiOperation(value = "Delete user by id WS")
+    public ResponseEntity deleteUserWS(@PathVariable("userId") Long userId) {
+        try {
+            userService.deleteUserWS(userId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

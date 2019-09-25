@@ -1,4 +1,4 @@
-package com.es.brujula.brugroup.ws.config;
+package com.es.brujula.brugroup.ws;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

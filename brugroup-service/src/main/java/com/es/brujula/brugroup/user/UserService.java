@@ -16,11 +16,20 @@ public interface UserService {
 
      Page<UserDto> getUsersPagination(Pageable pageable);
 
-     Optional<UserDto> getHotel(Long hotelId);
+     Optional<UserDto> getUser(Long userId);
+
+     Optional<UserDto> getUserWS(Long userId);
 
      UserDto createUser(UserDto userDto);
 
+     UserDto createUserWS(UserDto userDto);
+
      UserDto updateUser(UserDto hotelDto);
 
-     void delete(Long userId);
+     UserDto updateUserWS(UserDto hotelDto);
+
+     void deleteUser(Long userId);
+
+     void deleteUserWS(Long userId);
+
 }

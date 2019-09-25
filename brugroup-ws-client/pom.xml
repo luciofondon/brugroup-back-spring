@@ -40,6 +40,11 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.es.brujula</groupId>
+            <artifactId>brugroup-repository</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -58,11 +63,17 @@
                 <configuration>
                     <schemaLanguage>WSDL</schemaLanguage>
                     <generatePackage>com.es.brujula.brugroup.wsdl</generatePackage>
-                    <schemas>
+                    <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                    <schemaIncludes>
+                        <include>*.wsdl</include>
+                    </schemaIncludes>
+                    <!--<schemas>
                         <schema>
                             <url>http://localhost:8080/ws/users.wsdl</url>
                         </schema>
-                    </schemas>
+                    </schemas>-->
+
+
                 </configuration>
             </plugin>
         </plugins>

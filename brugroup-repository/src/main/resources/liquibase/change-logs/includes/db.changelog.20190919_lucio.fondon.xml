@@ -6,10 +6,10 @@
 
         <insert tableName="USER">
             <column name="ID" value="1"/>
-            <column name="US_FULLNAME" value="User"/>
-            <column name="US_USERNAME" value="user"/>
-            <column name="US_PASSWORD" value="YXAlMfOLArU8sOCeLF2GOrDIlcXg4PAyl9UR/vD8g3hIbDy"/>
-            <column name="US_LASTUPDATE" value="2014-02-20 11:01:20"/>
+            <column name="US_FULLNAME" value="Userws"/>
+            <column name="US_USERNAME" value="userws"/>
+            <column name="US_PASSWORD" value="$2a$10$QctBPCn6YM/reZT3MeiZT.2QFRHa3PKUR1ltJTibciqn/s46HjPIe"/>
+            <column name="US_LASTUPDATE" value="2019-02-20 11:01:20"/>
         </insert>
 
         <loadData encoding="UTF-8"

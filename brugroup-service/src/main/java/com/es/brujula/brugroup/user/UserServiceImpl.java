@@ -6,16 +6,14 @@ import com.es.brujula.brugroup.converter.UserWSServiceConverter;
 import com.es.brujula.brugroup.domain.User;
 import com.es.brujula.brugroup.UserDAO;
 import com.es.brujula.brugroup.converter.UserServiceConverter;
-import com.es.brujula.brugroup.wsdl.GetUsersResponse;
-import com.netflix.appinfo.InstanceInfo;
+import com.es.brujula.brugroup.wsdl.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +37,6 @@ public class UserServiceImpl implements UserService {
     private UserClient userClient;
 
 
-
     @Override
     public List<UserDto> getUsers() {
         return dao.findAll().stream()
@@ -60,11 +57,16 @@ public class UserServiceImpl implements UserService {
         return dao.findAll(pageable).map(hotel -> converter.toApiModel(hotel, UserDto.class));
     }
 
+    @Override
+    public Optional<UserDto> getUser(Long userId) {
+        return dao.findById(userId)
+                .map(userFromBd -> converter.toApiModel(userFromBd, UserDto.class));
+    }
 
     @Override
-    public Optional<UserDto> getHotel(Long hotelId) {
-        return dao.findById(hotelId)
-                .map(userFromBd -> converter.toApiModel(userFromBd, UserDto.class));
+    public Optional<UserDto> getUserWS(Long userId) {
+        GetUserResponse response = userClient.getUser(userId);
+        return Optional.ofNullable(converterWS.toApiModel(response.getUser(), UserDto.class));
     }
 
     @Override
@@ -80,6 +82,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto createUserWS(UserDto userDto) {
+        CreateUserResponse response = userClient.createUser(converterWS.toDomainModel(userDto, UserWS.class));
+        UserWS user = response.getUser();
+        String encoded = new BCryptPasswordEncoder().encode(user.getPassword());
+        return converterWS.toApiModel(user, UserDto.class);
+    }
+
+    @Override
     public UserDto updateUser(UserDto userDto) {
         userDto.setLastUpdate(LocalDateTime.now());
         User user = converter.toDomainModel(userDto, User.class);
@@ -88,8 +98,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
+    public UserDto updateUserWS(UserDto userDto) {
+        userDto.setLastUpdate(LocalDateTime.now());
+        UpdateUserResponse response = userClient.updateUser(converterWS.toDomainModel(userDto, UserWS.class));
+        return userDto;
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
         dao.deleteById(userId);
+    }
+
+    @Override
+    public void deleteUserWS(Long userId) {
+        userClient.deleteUser(userId);
     }
 
 }
